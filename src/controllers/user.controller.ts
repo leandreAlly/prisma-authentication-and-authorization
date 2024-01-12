@@ -1,31 +1,30 @@
-import { NextFunction, Request, Response } from 'express';
 import { User } from '@prisma/client';
-import { getUserByEmail, registerUser } from '../services/user.service';
+import { Request, Response } from 'express';
 import { ConflictRequestError } from '../errors/conflict-request-error';
-import { PasswordUtil } from '../utils/password.util';
 import { asyncWrapper } from '../middlewares/async-wrapper';
+import { getUserByEmail, registerUser } from '../services/user.service';
+import { PasswordUtil } from '../utils/password.util';
 
 const signUp = asyncWrapper(
-  async (req: Request<{}, {}, User>, res: Response, next: NextFunction) => {
-    const { email, password, name } = req.body;
+  async (req: Request<{}, {}, User>, res: Response) => {
+    const { email } = req.body;
 
     const existUser = await getUserByEmail(email);
     if (existUser) {
       throw new ConflictRequestError('Email is already exists');
     }
 
-    const hashedpassword = await PasswordUtil.toHash(password);
+    const hashedPassword = await PasswordUtil.toHash(req.body.password);
     const userData = {
-      email,
-      password: hashedpassword,
-      name,
+      ...req.body,
+      password: hashedPassword,
     };
 
-    const user = await registerUser(userData);
+    const { password, ...userInfo } = await registerUser(userData);
 
     return res
       .status(201)
-      .json({ message: 'signed up successfull', data: user });
+      .json({ message: 'signed up successfull', data: userInfo });
   }
 );
 
