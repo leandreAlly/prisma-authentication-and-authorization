@@ -1,5 +1,14 @@
 import { Prisma } from '@prisma/client';
 
-type UserCreateInput = Omit<Prisma.UserCreateInput, 'id' | 'createdAt'>;
+export type UserCreateInput = Omit<Prisma.UserCreateInput, 'id' | 'createdAt'>;
 
-export { UserCreateInput };
+export type UserLogin = Omit<
+  Prisma.UserCreateInput,
+  'id' | 'name' | 'createdAt'
+>;
+export type DecodedToken = {
+  id: string;
+  email: string;
+  iat: number;
+  exp: number;
+};
