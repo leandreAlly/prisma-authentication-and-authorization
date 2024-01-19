@@ -1,11 +1,11 @@
 import { User } from '@prisma/client';
 import { Request, Response } from 'express';
-import { ConflictRequestError } from '../errors/conflict-request-error';
-import { asyncWrapper } from '../middlewares/async-wrapper';
+import { ConflictRequestError } from 'error-ease';
+import { asyncWrapper } from 'error-ease';
 import { getUserByEmail, registerUser } from '../services/user.service';
 import { PasswordUtil } from '../utils/password.util';
 import { UserLogin } from '../utils/types';
-import { NotFoundError } from '../errors/not-found-error';
+import { NotFoundError } from 'error-ease';
 import { JwtUtil } from '../utils/jwt.util';
 
 const signUp = asyncWrapper(

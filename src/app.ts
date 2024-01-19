@@ -1,8 +1,8 @@
 import express from 'express';
 import cookieSession from 'cookie-session';
-import { errorHandler } from './middlewares/error-handler';
-import { NotFoundError } from './errors/not-found-error';
+import { NotFoundError } from 'error-ease';
 import allRoutes from './routes';
+import { errorHandler } from 'error-ease';
 
 const app = express();
 
